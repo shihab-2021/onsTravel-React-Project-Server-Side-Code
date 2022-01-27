@@ -130,11 +130,20 @@ async function run() {
       res.json(service);
     });
 
-    // for posting product
+    // for posting blog
     app.post("/blogs", async (req, res) => {
       const product = req.body;
       const result = await blogsCollection.insertOne(product);
       console.log(result);
+      res.json(result);
+    });
+
+    // for delete blog
+    app.delete("/blog/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productsCollection.deleteOne(query);
+      console.log("deleting user with id ", result);
       res.json(result);
     });
   } finally {
