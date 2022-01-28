@@ -121,6 +121,7 @@ async function run() {
       });
     });
 
+    // for finding specific users blog
     app.get("/myBlog", verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
@@ -143,6 +144,25 @@ async function run() {
       const product = req.body;
       const result = await blogsCollection.insertOne(product);
       console.log(result);
+      res.json(result);
+    });
+
+    // for update condition pending to approved
+    app.put("/blogs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          condition: "approved",
+        },
+      };
+      const result = await bookingCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      console.log("updating", id);
       res.json(result);
     });
 
