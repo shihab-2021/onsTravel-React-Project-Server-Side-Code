@@ -121,6 +121,14 @@ async function run() {
       });
     });
 
+    app.get("/myBlog", verifyToken, async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = blogsCollection.find(query);
+      const services = await cursor.toArray();
+      res.json(services);
+    });
+
     // for single blog
     app.get("/blogs/:id", async (req, res) => {
       const id = req.params.id;
