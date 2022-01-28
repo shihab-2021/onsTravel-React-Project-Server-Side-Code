@@ -130,6 +130,14 @@ async function run() {
       res.json(services);
     });
 
+    app.get("/requestedBlogs", verifyToken, async (req, res) => {
+      const email = req.query.email;
+      const query = { condition: "pending" };
+      const cursor = blogsCollection.find(query);
+      const services = await cursor.toArray();
+      res.json(services);
+    });
+
     // for single blog
     app.get("/blogs/:id", async (req, res) => {
       const id = req.params.id;
@@ -157,7 +165,7 @@ async function run() {
           condition: "approved",
         },
       };
-      const result = await bookingCollection.updateOne(
+      const result = await blogsCollection.updateOne(
         filter,
         updateDoc,
         options
